@@ -226,16 +226,12 @@ class oci_secrets_fns:
         return list_keys_response
 
     def schedule_secret_deletion(self,dst_vaults_client, secret_id, deletion_time):  
-        print(deletion_time)  
-        
         result_date = datetime.now() + timedelta(days=44) #set default delete to max 44 days, this will protect from any accidental deletion
-        logging.getLogger().info(f"[Info]Deleting a secret {secret_id} and delete date is set to {result_date}")
-        sys.exit()
         schedule_secret_deletion_response = dst_vaults_client.schedule_secret_deletion(
             secret_id=secret_id,
             schedule_secret_deletion_details=oci.vault.models.ScheduleSecretDeletionDetails(
                 time_of_deletion=result_date))
-        return schedule_secret_deletion    
+        return schedule_secret_deletion_response    
 
     def cancel_secret_deletion(self,dst_vaults_client, secret_id):
         cancel_secret_deletion_response = dst_vaults_client.cancel_secret_deletion(
