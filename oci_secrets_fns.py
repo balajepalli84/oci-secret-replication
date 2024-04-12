@@ -225,12 +225,13 @@ class oci_secrets_fns:
             logging.getLogger().error(f"[Error]list_keys - An error occurred: {e}")
         return list_keys_response
 
-    def schedule_secret_deletion(self,dst_vaults_client, secret_id, deletion_time):  
+    def schedule_secret_deletion(self,src_vault_client,dst_vaults_client, secret_id, src_secret_id):  
         result_date = datetime.now() + timedelta(days=44) #set default delete to max 44 days, this will protect from any accidental deletion
+        secret_data=src_vault_client.get_secret(secret_id=src_secret_id)  
         schedule_secret_deletion_response = dst_vaults_client.schedule_secret_deletion(
             secret_id=secret_id,
             schedule_secret_deletion_details=oci.vault.models.ScheduleSecretDeletionDetails(
-                time_of_deletion=result_date))
+                time_of_deletion=secret_data.data.time_of_deletion))
         return schedule_secret_deletion_response    
 
     def cancel_secret_deletion(self,dst_vaults_client, secret_id):

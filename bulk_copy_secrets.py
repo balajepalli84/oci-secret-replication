@@ -99,8 +99,8 @@ try:
                 print("[Info]  Secret {} already present in dest vault, updating the secret".format(secret_name))
             elif dst_secret_presence == True and secret_dtls["lifecycle_state"] == 'PENDING_DELETION' :                    
                 if dst_secret_state == 'ACTIVE':
-                    oci_secrets_fns.schedule_secret_deletion(dst_vaults_client, dst_secret_id, secret_dtls['time_of_deletion'])
-                    print("[Info]  Marking Secret {} for deletion at {} ".format(secret_name,secret_dtls['time_of_deletion'])   )     
+                    oci_secrets_fns.schedule_secret_deletion(src_vault_client,dst_vaults_client, dst_secret_id, secret_dtls['secret_ocid'])
+                    print("[Info]  Marking Secret {} for deletion".format(secret_name))     
                 else:
                     print("[Info]  Secret {} is scheduled for deletion on {}. Skipping Replication ".format(secret_name,secret_dtls['time_of_deletion'])   ) 
             else:
